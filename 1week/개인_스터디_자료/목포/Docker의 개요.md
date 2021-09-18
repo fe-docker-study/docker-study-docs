@@ -1,6 +1,10 @@
 # Docker 개요
 
+## Docker란?
 Docker는 컨테이너 기반의 오픈소스 가상화 플랫폼이라고 할 수 있다.
+
+<br/>
+
 
 ## 컨테이너? 그게 뭔가요
 
@@ -89,7 +93,7 @@ Image 섹션에서 설명했던 것과 같이 Image Layer의 구조대로 커맨
 
 ![도커 이미지 경로](https://images.velog.io/images/shinmj1207/post/0c96cf24-425e-4af4-9e00-270a8238f244/image.png)
 
-이미지는 url 방식으로 관리하며 태그를 붙일 수 있다. docker.io/library 는 생략가능하다.
+이미지는 url 방식으로 관리하며 태그를 붙일 수 있다. `docker.io/library` 는 생략가능하다.
 
 </div>
 </details>
