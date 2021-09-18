@@ -108,10 +108,9 @@ Image 섹션에서 설명했던 것과 같이 Image Layer의 구조대로 커맨
 
 <br/>
 <br/>
----
-<details>
-<summary>[출처]</summary>
-<div markdown="2">
+
+
+#### 출처
 
 https://bcho.tistory.com/805
 
@@ -119,5 +118,3 @@ https://cultivo-hy.github.io/docker/image/usage/2019/03/14/Docker정리/
 
 https://subicura.com/2017/01/19/docker-guide-for-beginners-1.html
 
-</div>
-</details>
