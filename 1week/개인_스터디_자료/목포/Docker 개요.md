@@ -25,7 +25,7 @@ Docker는 컨테이너 기반의 오픈소스 가상화 플랫폼이라고 할 �
 
 (각 기능들이 어떤 역할을 하는지 궁금하시다면 추후 첨언하겠습니다.)
 
-여기서 User~API는 User Space, System Call~CPU 레벨(Hadware) 까지는 Kernel Space로 영역으로 지칭된다. 이 커널은 OS와 용어를 혼용하여 쓰는 경우가 많은 듯하다.
+여기서 User\~API는 User Space, System Call\~CPU 레벨(Hadware) 까지는 Kernel Space로 영역으로 지칭된다. 이 커널은 OS와 용어를 혼용하여 쓰는 경우가 많은 듯하다.
 
 자, 커널의 의미를 대충 알았으니 다시 Vmware와 리눅스 컨테이너와의 비교로 돌아오자.
 ![vmware와 리눅스 컨테이너 비교](https://images.velog.io/images/shinmj1207/post/d071e5c8-d6a8-4fa8-a6a8-512062df95d6/image.png)
