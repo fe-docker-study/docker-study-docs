@@ -25,7 +25,7 @@ Docker는 컨테이너 기반의 오픈소스 가상화 플랫폼이라고 할 �
 
 (각 기능들이 어떤 역할을 하는지 궁금하시다면 추후 첨언하겠습니다.)
 
-여기서 User\~API는 User Space, System Call\~CPU 레벨(Hadware) 까지는 Kernel Space로 영역으로 지칭된다. 이 커널은 OS와 용어를 혼용하여 쓰는 경우가 많은 듯하다.
+여기서 User\~API는 User Space, System Call\~CPU 레벨(Hadware) 까지는 Kernel Space로 영역으로 지칭된다. 궁극적으로 커널은 OS의 중추이며 하드웨어의 시스템 자원을 관리하는 역할을 한다. 커널은 OS와 용어를 혼용하여 쓰는 경우가 많은 듯하다.
 
 자, 커널의 의미를 대충 알았으니 다시 Vmware와 리눅스 컨테이너와의 비교로 돌아오자.
 ![vmware와 리눅스 컨테이너 비교](https://images.velog.io/images/shinmj1207/post/d071e5c8-d6a8-4fa8-a6a8-512062df95d6/image.png)
@@ -51,6 +51,7 @@ Docker는 컨테이너 기반의 오픈소스 가상화 플랫폼이라고 할 �
 ## Docker Image 와 Docker File
 
 ### Image
+![](https://images.velog.io/images/shinmj1207/post/e15c74be-00c7-484a-bab4-f8cea88a59ac/image.png)
 
 Docker Image는 **컨테이너 실행에 필요한 파일과 설정값 등을 포함하고 있는 것**으로 상태값을 가지지 않고 변하지 않는다. 컨테이너는 이미지를 실행한 상태라고 볼 수 있고 추가되거나 변하는 값은 컨테이너에 저장된다. (컨테이너 삭제 시 복구 불가능)
 
