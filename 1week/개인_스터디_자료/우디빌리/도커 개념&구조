@@ -1,0 +1,30 @@
+## Virtualization (가상 머신)과 도커
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/de7fd1c6-840d-4244-ba4c-3bf7e4814221/Untitled.png)
+
+**Virtualization (가상화)**
+
+- Hypervisor라는 sw를 설치하고 그 위의 가상 컴퓨터(guest OS)에서 어플리케이션을 돌림
+    - scale-out, scale-in 어려움 (예: fe app을 경우에 따라 여러개 운영할 수 있음, 가상화 시스템에서는 이 개수를 증감하기가 어렵다)
+    - 환경 구축 (guestOS) 설치해야 하기 때문에 용량이 크다.
+- **하드웨어**에 가상으로 액세스하는 Linux, Windows 등의 게스트 운영체제를 의미합니다. 컨테이너는 가상 머신과 마찬가지로 애플리케이션을 관련 라이브러리 및 종속 항목과 함께 패키지로 묶어 소프트웨어 서비스 구동을 위한 격리 환경을 마련해 줍니다.
+
+**Container Engine (platform)**
+
+- 적은 용량으로 환경 구축 가능
+- scale in, out이 쉽다 (확장성이 높다. 배포가 쉽다)
+
+### 컨테이너란?
+
+- 어떤 app을 구동해주는 독립된 공간
+- app + app을 구동하기 위한 환경 ~~설정 파일~~( lib, bin)  → 도커 파일에서 정의
+- 컨테이너는 리눅스 커널(host os)의 기능을 기반으로 만들어짐
+    - chroot : 독립된 공간 형성
+    - namespace :  6개의 isolate 기능 지원
+    - cgroup : 필요한 만큼 hw 지원
+
+- 컨테이너 엔진 : 리눅스 커널의 storage, network, namespaces를 도커 플랫폼 위에서 쓸 수 있도록 도와줌
+
+### AWS에 도커 설치하기
+
+[https://docs.aws.amazon.com/ko_kr/cloud9/latest/user-guide/sample-docker.html](https://docs.aws.amazon.com/ko_kr/cloud9/latest/user-guide/sample-docker.html)
