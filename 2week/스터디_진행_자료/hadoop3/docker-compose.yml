@@ -11,7 +11,7 @@ services:
   namenode:
     image: hadoop-namenode:3.1.1
     container_name: namenode
-    hostname: 3.36.90.28
+    hostname: public host
     ports:
       - 9870:9870
       - 9000:9000
@@ -23,13 +23,13 @@ services:
   datanode01:
     <<: *datanode_base
     container_name: datanode01
-    hostname: 3.36.90.28
+    hostname: public host
     volumes:
       - datanode01:/opt/hadoop/dfs/data
   datanode02:
     <<: *datanode_base
     container_name: datanode02
-    hostname: 3.36.90.28
+    hostname: public host
     volumes:
       - datanode02:/opt/hadoop/dfs/data
 volumes:
