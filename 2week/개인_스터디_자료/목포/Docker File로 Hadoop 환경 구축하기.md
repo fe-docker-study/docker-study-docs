@@ -41,6 +41,19 @@
 
 ## 파일 구조
 
+📦hadoop3  
+ ┣ 📂base  
+ ┃ ┣ 📜Dockerfile  
+ ┃ ┗ 📜core-site.xml  
+ ┣ 📂datanode  
+ ┃ ┣ 📜Dockerfile  
+ ┃ ┣ 📜hdfs-site.xml  
+ ┃ ┗ 📜start.sh  
+ ┗ 📂namenode  
+ ┃ ┣ 📜Dockerfile  
+ ┃ ┣ 📜hdfs-site.xml  
+ ┃ ┗ 📜start.sh
+
 ## 파일 작성
 
 ### base image 생성
@@ -114,9 +127,6 @@ sudo docker images
 <br/>
 
 <img src="https://images.velog.io/images/shinmj1207/post/e11dd3f1-b80a-4d90-b91a-14a7d8e4fd02/image.png" style="width : 30%;">
-
-<br/>
-<br/>
 
 ### hadoop namenode image 생성
 
