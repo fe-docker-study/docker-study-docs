@@ -22,8 +22,7 @@ RUN curl -fSL "$HADOOP_URL" -o /tmp/hadoop.tar.gz \
 RUN ln -s /opt/hadoop-$HADOOP_VERSION /opt/hadoop \
     && mkdir /opt/hadoop/dfs \
     && ln -s /opt/hadoop-$HADOOP_VERSION/etc/hadoop /etc/hadoop \
-    && rm -rf /opt/hadoop/share/doc \
-    && mkdir /usr/lib/jvm/zulu-8-amd64
+    && rm -rf /opt/hadoop/share/doc 
  
 # 로컬의 core-site.xml 파일을 복제
 ADD core-site.xml /etc/hadoop/
