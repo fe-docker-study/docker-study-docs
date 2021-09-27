@@ -1,4 +1,4 @@
-# 기반이 되는 이미지를 설정. ubuntu 18 기반인 zulu의 openjdk 8버전을 선택
+₩# 기반이 되는 이미지를 설정. ubuntu 18 기반인 zulu의 openjdk 8버전을 선택
 FROM azul/zulu-openjdk:8
 #RUN sed -i 's/archive.ubuntu.com/ftp.daumkakao.com/g' /etc/apt/sources.list
  
