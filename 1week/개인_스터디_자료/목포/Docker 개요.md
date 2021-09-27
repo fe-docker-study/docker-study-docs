@@ -21,7 +21,8 @@ Docker는 컨테이너 기반의 오픈소스 가상화 플랫폼이라고 할 �
 
 좀 더 자세한 구조는 다음과 같다.
 
-![os 구조](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/4543d1af-bb0b-4f21-bc94-291fd4fb68d2/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAT73L2G45O3KS52Y5%2F20210918%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20210918T035248Z&X-Amz-Expires=86400&X-Amz-Signature=e6e2c9ede795274ddea034c6bdb3364e09f0eb3080e263254ecfe950141fccc4&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22 "사용자, 어플리케이션, OS, 하드웨어와의 관계")
+![os 구조](https://images.velog.io/images/shinmj1207/post/00026afe-b5ed-4e44-a983-ff951e6c8c81/image.png "사용자, 어플리케이션, OS, 하드웨어와의 관계")
+
 
 (각 기능들이 어떤 역할을 하는지 궁금하시다면 추후 첨언하겠습니다.)
 
