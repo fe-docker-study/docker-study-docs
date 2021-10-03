@@ -48,9 +48,6 @@ $ sudo docker volume inspect hadoop3_namenode
 
 ```
 
-
-
-
 ### 볼륨 생성하고 컨테이너에 마운트하기
 
 만약 새 컨테이너에 기존 볼륨을 연결하고 싶을 때 마운트 기능을 사용한다. docker run 으로 컨테이너 실행 시 -v로 볼륨 경로를 명시하면 된다.
@@ -83,8 +80,8 @@ test.txt
 동일한 볼륨을 사용했기 때문에 기존에 생성한 test.txt 파일을 볼 수 있다.
 
 ## Bind Mount (호스트 서버 경로와 컨테이너의 경로를 연결)
-![image](https://user-images.githubusercontent.com/31172248/135749415-52a784f9-f170-419a-9c13-d9124e823ac7.png)
 
+![image](https://user-images.githubusercontent.com/31172248/135749415-52a784f9-f170-419a-9c13-d9124e823ac7.png)
 
 -v 옵션의 콜론(:) 앞 부분에 마운트명 대신 호스트의 경로를 써주면된다.
 
@@ -132,12 +129,12 @@ $ docker inspect <container ID>
 
 ## mount 옵션
 
-우리는 위에서 볼륨 생성 시 -v 옵션을 사용한다고 배웠다. 이는 독립형 컨테이너에서 사용되는 방식이며 [Docker Swarm Mode](_blank "호스트 서버의 컨테이너들을 배포, 관리하기 위한 툴. 쿠버네티스를 대체할 수 있는 툴이라고 보면 됨")(에서는 --mount가 사용된다.
+우리는 위에서 볼륨 생성 시 -v 옵션을 사용한다고 배웠다. 이는 독립형 컨테이너에서 사용되는 방식이며 **Docker Swarm Mode**(호스트 서버의 컨테이너들을 배포, 관리하기 위한 툴. 쿠버네티스를 대체할 수 있는 툴이라고 보면 됨)에서는 --mount가 사용된다.
 --mount 옵션은 쉼표로 구분되며 여러 key-value 쌍으로 구성된다.
 
 ## tmpFS Mount
-![image](https://user-images.githubusercontent.com/31172248/135749421-5165e2bd-0045-4d9c-a41e-78d84f23118e.png)
 
+![image](https://user-images.githubusercontent.com/31172248/135749421-5165e2bd-0045-4d9c-a41e-78d84f23118e.png)
 
 tmpfs mount는 호스트 시스템이나 컨테이너 내에서 데이터를 유지하지 않으려는 경우에 적합하다. 이는 보안상의 이유이거나 애플리케이션이 많은 양의 비영구상태 데이터를 작성해야할 때 컨테이너의 성능을 보호하기 위한 것일 수도 있다.
 
