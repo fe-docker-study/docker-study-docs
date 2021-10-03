@@ -11,6 +11,8 @@ Docker에서는 이와 같은 문제를 위해 두 가지 옵션을 제공한다
 
 Docker의 볼륨은 기본적으로 /var/lib/docker/volumes 경로에 저장된다. 각 데이터는 /var/lib/docker/volumes/볼륨명/\_data 아래에 저장된다. 이 볼륨들은 컨테이너가 삭제되어도 유지된다.
 
+![image](https://user-images.githubusercontent.com/31172248/135749401-24aed981-5467-4d55-80ca-cf4df4cb1949.png)
+
 ### Volume 조회
 
 ```console
@@ -46,7 +48,8 @@ $ sudo docker volume inspect hadoop3_namenode
 
 ```
 
-![](사진)
+
+
 
 ### 볼륨 생성하고 컨테이너에 마운트하기
 
@@ -80,6 +83,8 @@ test.txt
 동일한 볼륨을 사용했기 때문에 기존에 생성한 test.txt 파일을 볼 수 있다.
 
 ## Bind Mount (호스트 서버 경로와 컨테이너의 경로를 연결)
+![image](https://user-images.githubusercontent.com/31172248/135749415-52a784f9-f170-419a-9c13-d9124e823ac7.png)
+
 
 -v 옵션의 콜론(:) 앞 부분에 마운트명 대신 호스트의 경로를 써주면된다.
 
@@ -131,6 +136,8 @@ $ docker inspect <container ID>
 --mount 옵션은 쉼표로 구분되며 여러 key-value 쌍으로 구성된다.
 
 ## tmpFS Mount
+![image](https://user-images.githubusercontent.com/31172248/135749421-5165e2bd-0045-4d9c-a41e-78d84f23118e.png)
+
 
 tmpfs mount는 호스트 시스템이나 컨테이너 내에서 데이터를 유지하지 않으려는 경우에 적합하다. 이는 보안상의 이유이거나 애플리케이션이 많은 양의 비영구상태 데이터를 작성해야할 때 컨테이너의 성능을 보호하기 위한 것일 수도 있다.
 
