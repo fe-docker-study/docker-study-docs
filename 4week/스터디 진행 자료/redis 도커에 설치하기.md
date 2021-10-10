@@ -254,9 +254,7 @@ $ ls -al
 redis-docker-compose.yml 작성
 
 ```tsx
-version: '3.8'
-services:
-    myredis6:
+  myredis6:
       image: bagidevelopment/redis:6.2.6
       command: redis-server /usr/local/etc/redis/redis.conf
       container_name: myredis6
@@ -274,7 +272,6 @@ networks:
     default:
       external:
         name : redis-net
-
 ```
 
 LABEL key=value
