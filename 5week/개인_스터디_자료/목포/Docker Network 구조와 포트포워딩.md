@@ -1,9 +1,9 @@
 # Docker Network 
 
 
-//그림
-
 ## Docker Network의 구조
+![image](https://user-images.githubusercontent.com/31172248/137865000-d5c5847f-6f0f-4d6f-a802-fa9169090bfb.png)
+
 Docker 서비스를 설치하게 되면 자동으로 **Host Machine**의 Network Interface에 **Docker0** 라는 Virtural Interface가 생성된다. 생성 시 Gateway는 자동으로 172.17.0.1로 설정되며, 16 bit netmask(255.255.0.0)으로 설정된다. 
 이렇게 자동으로 할당된 IP는 DHCP를 통해 받는 것이 아닌 docker 내부 로직에 의해 자동으로 할당된다.
 
@@ -36,7 +36,8 @@ $ ipaddr
 예를들어, 웹 기반의 Container가 존재한다고 가정하고 이를 외부에서 접속한다고 해보자. 우리는 컨테이너에 직접 접속할 수 있을까? 그럴 순 없다. 우리는 eth0(host)와 container간의 포트포워딩을 통해 이를 해결할 수 있다.
 
 
-//그림
+![image](https://user-images.githubusercontent.com/31172248/137865094-49773c22-8061-44fc-93ed-29b1de7818f5.png)
+
 
 다음과 같이 nginx 컨테이너와 웹서버 appjs 가 하나씩 있다고 했을 때 컨테이너 실행 시 p옵션을 통해 **host포트:컨테이너 포트**를 매핑시켜줄 수 있다. 
 ```docker
