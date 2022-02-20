@@ -11,7 +11,8 @@ In-memory 기반의 "키-값" 구조 데이터 관리 시스템이다. 모든 �
 캐시란 **자주 사용하는 데이터나 값을 미리 복사해 놓는 임시장소**를 가리킨다.
 잠시 컴퓨터구조 얘기를 해보자. 예를들어, 하드디스크(보조기억장치)에서 저장된 프로그램을 읽어온다고 할 때 CPU는 프로그램을 실행하기 위해 주기억장치에 저장된 프로그램 명령어와 데이터를 처리하고 그것을 다시 저장할 것이다. 이 과정에서 각 장치에 접근하는 시간은 보조기억장치 > 주기억장치 순으로 느리다. 만약 모든 작업들을 매번 이런 식으로 처리하게 되면 처리 속도는 현저히 느려질 것이다.
 때문에 CPU 내부에 cache를 두어 자주 사용하는 데이터나 작업들을 멀리까지 가서 가져올 필요가 없도록 한다.
-![](https://book.huihoo.com/pc-architecture/images/944.png)
+![image](https://user-images.githubusercontent.com/31172248/136685030-8ca13711-3591-4314-9b66-4be82ec89235.png)
+
 
 ## 캐시의 사용 전략
 
@@ -23,18 +24,21 @@ In-memory 기반의 "키-값" 구조 데이터 관리 시스템이다. 모든 �
 2. 그렇다면 애플리케이션은 DB에서 데이터를 조회하고 사용자한테 제공한 뒤
 3. 가져온 데이터를 캐시 저장소에 저장한다.
 
-![](https://miro.medium.com/max/1092/1*Jf6DwvMTxuubOXravN8V8w.png)
+![image](https://user-images.githubusercontent.com/31172248/136685063-3aa30047-294a-4677-af2c-4afdc1400a7a.png)
+
 
 ### Write back
 
 CPU 데이터를 사용할 때 데이터는 먼저 캐시로 기록되는데 캐시 내에 일시적으로 저장 후 블록에서 캐시가 해제될 때만 DB에 기록하는 방식이다. 즉, 데이터를 쓸 때 메모리에는 쓰지 않고 캐시에만 업데이트하다가 한꺼번에 보조기억장치/주기억장치로 기록하는 방식이다. 하지만, 이 경우 DB에 쓰기 전 캐시 서버에 장애가 발생해 서버가 죽어버린다면 값의 차이가 발생할 수도 있다.
 
-![그 외](https://wnsgml972.github.io/database/2020/12/13/Caching/)
+[그 외의 방법들]
+https://wnsgml972.github.io/database/2020/12/13/Caching/
 
 ## Redis 특징
 
 1. 서버의 분산처리를 통해 읽기 성능을 증대 시킬 수 있다. (갱신용 master 1대, 복제된 읽기 전용 서버 n대)
-   ![](https://media.vlpt.us/images/mu1616/post/a590d41d-36c2-4dea-a756-80c44a7ef047/image.png)
+   ![image](https://user-images.githubusercontent.com/31172248/136685116-7fdbf29f-c578-4007-9a4a-6e660ae40a5b.png)
+
 2. 문자열, 리스트, 해시, 셋, sorted set과 같은 다양한 데이터형을 지원한다.
 
 ## 사용 사례
@@ -54,6 +58,6 @@ CPU 데이터를 사용할 때 데이터는 먼저 캐시로 기록되는데 캐
 Redis가 Collection을 사용하는 이유는 높은 생산성 때문이다. 덕분에 데이터를 다양한 방식으로 활용할 수 있다.  
 ex) List형 데이터 입력과 삭제가 MySQL보다 10배 빠르다.
 
-https://velog.io/@devsh/Redis-1-Redis란
-https://ozofweird.tistory.com/entry/Redis-Redis-구조-실제-활용-사례
-https://jyejye9201.medium.com/레디스-redis-란-무엇인가-2b7af75fa818
+https://velog.io/@devsh/Redis-1-Redis란. 
+https://ozofweird.tistory.com/entry/Redis-Redis-구조-실제-활용-사례. 
+https://jyejye9201.medium.com/레디스-redis-란-무엇인가-2b7af75fa818. 
