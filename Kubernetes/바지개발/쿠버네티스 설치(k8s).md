@@ -2,37 +2,9 @@
 
 - 참고 : 컨테이너 인프라 환경 구축을 위한 쿠버네티스/도커
   https://github.com/sysnet4admin/_Book_k8sInfra
-
 - 사전 설치 : VitualBox, Vagrant
 
-  
 
-## VirtualBox 설치
-
-- virtualBox: 가상화 소프트웨어
-
-- https://www.virtualbox.org/wiki/Downloads
-
-  
-
-## 베이그런트 설치하기
-
-- 베이그런트 : 사용자의 요구에 맞게 시스템 자원을 할당, 배치, 배포해 두었다가 필요할 때 시스템을 사용할 수 있는 상태로 만들어 줌(가상머신 동작 제어 도구)
-
-- https://www.vagrantup.com/downloads
-
-- cmd에서 베이그런트 초기화 명령을 실행해 프로비저닝에 필요한 기본코드 생성
-
-  ```java
-  > cd c:\\HashiCorp
-  c:\\HashiCorp>vagrant init
-  A `Vagrantfile` has been placed in this directory. You are now
-  ready to `vagrant up` your first virtual environment! Please read
-  the comments in the Vagrantfile as well as documentation on
-  `vagrantup.com` for more information on using Vagrant.
-  ```
-
-  
 
 ## 컨테이너 인프라 환경
 
@@ -69,6 +41,33 @@
 - 주요 4가지 솔루션-  kubeadm, kops(Kubernetes operations), KRIB(Kubernetes Rebar Integrated Bootstrap), Kuberspray
 
 - kubeadm은 사용자가 변경하기 수월하고 온프레미스(On-Premises)와 클라우드를 모두 지원하며, 배우기 쉬움. 가장 널리 알려져 있음
+
+  
+
+## VirtualBox 설치
+
+- virtualBox: 가상화 소프트웨어
+
+- https://www.virtualbox.org/wiki/Downloads
+
+  
+
+## 베이그런트 설치하기
+
+- 베이그런트 : 사용자의 요구에 맞게 시스템 자원을 할당, 배치, 배포해 두었다가 필요할 때 시스템을 사용할 수 있는 상태로 만들어 줌(가상머신 동작 제어 도구)
+
+- https://www.vagrantup.com/downloads
+
+- cmd에서 베이그런트 초기화 명령을 실행해 프로비저닝에 필요한 기본코드 생성
+
+  ```java
+  > cd c:\\HashiCorp
+  c:\\HashiCorp>vagrant init
+  A `Vagrantfile` has been placed in this directory. You are now
+  ready to `vagrant up` your first virtual environment! Please read
+  the comments in the Vagrantfile as well as documentation on
+  `vagrantup.com` for more information on using Vagrant.
+  ```
 
   
 
