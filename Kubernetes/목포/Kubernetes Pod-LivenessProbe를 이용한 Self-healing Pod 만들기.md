@@ -2,7 +2,8 @@
 
 ## Self-healing?
 
-[image:57909056-F616-4E4E-96CE-CF0B3858E017-1862-000000446F1701C2/54B2E3E8-E3A7-45AF-9363-3B4FDFB6265C.png]
+![54B2E3E8-E3A7-45AF-9363-3B4FDFB6265C](https://user-images.githubusercontent.com/31172248/159274355-f2bb1da7-25cf-4fd4-8c4c-2e1c266574dd.png)
+
 [쿠버네티스 홈페이지]("kubernetes.io")에 가보면 쿠버네티스가 지원하는 기능을 볼 수 있는데, 바로 컨테이너가 죽었거나 내려갔을 때 재배치해주거나, 리스케줄해주는 것을 말한다. 쿠버네티스의 핵심적인 기능이라고 볼 수 있다. Self-healing 안에 포함된 것이 Liveness Probe이다.
 
 ## Liveness Probe
@@ -49,9 +50,9 @@ livenessProbe 중 httpGet으로 (WebService)로 건강하게 동작 중인지 �
 
 ```console
 livenessProbe:
-		httpGet:
-			path: /
-			prot: 80
+	httpGet:
+	  path: /
+	  prot: 80
 ```
 
 - tcpSocket probe
@@ -60,8 +61,8 @@ livenessProbe:
 
 ```console
 livenessProbe:
-		tcpSocket:
-			prot: 22
+	tcpSocket:
+	  prot: 22
 ```
 
 - exec probe
@@ -70,10 +71,10 @@ livenessProbe:
 
 ```console
 livenessProbe:
-		exec:
-			command:
-			- ls
-			- /data/file
+	exec:
+	command:
+	  - ls
+	  - /data/file
 ```
 
 여기서 restart한다는 것은 컨테이너를 지웠다가 새로 받아온다는 것이다. pod는 그대로 있기 때문에 pod에 할당된 ip는 변하지 않는다.
