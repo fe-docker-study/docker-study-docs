@@ -3,6 +3,7 @@
 # 쿠버네티스 Service
 
 ## 서비스 개념
+![image](https://user-images.githubusercontent.com/31172248/162581914-c4d200da-53e5-4707-9136-bc32695d7946.png)
 
 ## 서비스 Definition
 
@@ -23,6 +24,8 @@ spec:
 ## 서비스의 타입
 
 ### CluserIP
+![image](https://user-images.githubusercontent.com/31172248/162581927-db9b042b-c338-4864-917a-b180c320120e.png)
+
 
 Pod 그룹의 단일 진입점(Virtual IP) 생성
 
@@ -150,8 +153,10 @@ webui-6f8645dc9-nrt6k   1/1     Running   0          12m   10.244.1.5   node01  
 ```
 
 ### NodePort
+![image](https://user-images.githubusercontent.com/31172248/162581936-e2e4ae56-5a17-44fd-bb63-8104b59f405a.png)
 
-Cluster IP가 생성된 후 모든 Worker Node에 외부에서 접속가능한
+
+Cluster IP가 생성된 후 모든 Worker Node에 외부에서 접속가능한 포트를 
 
 - 모든 노드를 대상으로 외부 접속 가능한 포트를 예약
 - Default NodePort 범위 : 30000- 32767
@@ -229,6 +234,8 @@ webui #1
 ```
 
 ### LoadBalancer
+![image](https://user-images.githubusercontent.com/31172248/162581949-53eed358-e687-4045-86af-ac7cc6c54d0c.png)
+
 
 - Public 클라우드(AWS, Azure, GCP 등)에서 운영가능
 - LoadBalancer를 자동으로 구성 요청
@@ -262,6 +269,8 @@ loadbalancer-service   LoadBalancer   10.108.174.29   <pending>     80:31227/TCP
 ```
 
 ### ExternalName
+![image](https://user-images.githubusercontent.com/31172248/162581958-19d5d25a-eb2c-4985-8945-d2d2a60c1cd6.png)
+
 
 클러스터 내부에서 External의 도메인을 설정
 
@@ -424,7 +433,7 @@ node01$ iptables -t nat -S | grep 80
 - kube-porxy는 service API 요청 시 iptables rule이 생성
 - 클라이언트 연결은 kube-proxy가 받아서 iptables 룰을 통해 연결
 
-4. IPVS
+3. IPVS
 
 - 리눅스 커널이 지원하는 L4 로드밸런싱 기술을 이용
 - 별도의 ipvs 지원 모듈을 설정한 후 적용가능
