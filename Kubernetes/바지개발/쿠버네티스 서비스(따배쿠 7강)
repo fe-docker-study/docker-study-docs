@@ -1,0 +1,492 @@
+# 7강 쿠버네티스 서비스
+
+## 서비스(API) 개념
+
+-  동일한 서비스를 제공하는 pod그룹의 단일진입점(virtual IP)을 제공
+-  서비스는 지정된 IP로 생성 가능
+-  여러 pod를 묶어서 로드밸런싱이 가능
+-  고유한 DNS를 가질 수 있게 함
+-  라벨 셀렉터(label selector)를 이용해 관리하고자 하는 pod들을 정의할 수 있음
+
+## deployment와 Service 비교
+
+###  deployment
+   -   nginx 컨테이너에 label인 app: webui을 붙여 3개를 운영
+
+```bash
+#deploy-nginx.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webui
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webui
+  template:
+    metadata:
+      name: nginx-pod
+      labels:
+        app: webui
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx:1.14
+
+```
+
+### service
+   -   kubectl create로 생성하면 실제 클러스터 ip가 생성돼 로드밸러서 기능을 제공
+
+```bash
+apiVersion: v1
+kind: Service
+metadata:
+  name: webui-svc
+spec:
+  clusterIP: 10.96.100.100
+  selector:
+    app:webui
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+
+```
+
+## 서비스 타입
+
+### ClusterIP
+
+-   label selector를 이용해 동일한 label 파드의 그룹으로 단일 진입점 (virtual ip)을 생성
+-   클러스터 내부에서만 접근 가능하고, 외부 IP를 할당하지 못해 접근이 불가능함
+-   type 생략 시 default 값으로 10.96.0.0/12 범위에서 할당됨
+
+#### 실습
+
+-   디플로이먼트를 먼저 생성하고, 서비스를 생성해 단일진입점(cluster ip) 만들어 줌
+    
+    -   deploy-nginx.yaml
+    
+    ```bash
+    #cat deploy-nginx.yaml
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: webui
+    spec:
+      replicas: 3
+      selector:
+        matchLabels:
+          app: webui
+      template:
+        metadata:
+          name: nginx-pod
+          labels:
+            app: webui
+        spec:
+          containers:
+          - name: nginx-container
+            image: nginx:1.14
+    
+    ```
+    
+    -   kubectl create로 컨테이너 3개 구현
+    
+    ```bash
+    # kubectl create -f deploy-nginx.yaml
+    deployment.apps/webui created
+    
+    # kubectl get pods -o wide
+    NAME                     READY   STATUS    RESTARTS   AGE   IP          NODE                NOMINATED NODE   READINESS GATES
+    webui-6d4c4cc4b8-5nf72   1/1     Running   0          24s   10.44.0.1   node1.example.com   <none>           <none>
+    webui-6d4c4cc4b8-7wgvt   1/1     Running   0          24s   10.36.0.1   node3.example.com   <none>           <none>
+    webui-6d4c4cc4b8-gngbx   1/1     Running   0          24s   10.45.0.0   node2.example.com   <none>           <none>
+    
+    ```
+    
+    -   clusterip-nginx.yaml
+    
+    ```bash
+    #cat clusterip-nginx.yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: webui-svc
+    spec:
+      clusterIP: 10.100.100.100
+      selector:
+        app:webui
+      ports:
+      - protocol: TCP
+        port: 80
+        targetPort: 80
+    
+    ```
+    
+    -   클러스터 ip 생성
+    
+    ```bash
+    # kubectl create -f clusterip-nginx.yaml
+    service/clusterip-service created
+    
+    # kubectl get svc -o wide
+    NAME                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+    clusterip-service   ClusterIP   10.100.100.100   <none>        80/TCP    6s    app=webui
+    kubernetes          ClusterIP   10.96.0.1        <none>        443/TCP   18d   <none>
+    
+    # kubectl describe svc clusterip-service
+    Name:              clusterip-service
+    Namespace:         default
+    Labels:            <none>
+    Annotations:       <none>
+    Selector:          app=webui
+    Type:              ClusterIP
+    IP Family Policy:  SingleStack
+    IP Families:       IPv4
+    IP:                10.100.100.100
+    IPs:               10.100.100.100
+    Port:              <unset>  80/TCP
+    TargetPort:        80/TCP
+    Endpoints:         10.36.0.1:80,10.44.0.1:80,10.45.0.0:80
+    Session Affinity:  None
+    Events:            <none>
+    
+    ```
+    
+-   동작 확인
+    
+
+```bash
+# curl 10.100.100.100
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="<http://nginx.org/>">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="<http://nginx.com/>">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+
+```
+
+-   삭제
+
+```bash
+# kubectl delete svc clusterip-service
+service "clusterip-service" deleted
+
+```
+
+### NodePort
+
+-   클러스터 IP뿐만 아니라 모든 노드의 IP와 포트를 통해서도 접근이 가능
+-   모든 노드를 대상으로 외부 접속 가능한 포트를 예약
+-   Default NodePort 범위: 30000-32767, ClusterIP를 생성 후 NodePort 예약
+
+![Untitled](https://user-images.githubusercontent.com/90545926/162612721-d308f240-6ba8-4597-99f2-00116883ae9d.png)
+
+#### 실습
+
+-   디플로이먼트를 먼저 생성하고, 서비스 생성
+
+```bash
+# kubectl create -f deploy-nginx.yaml
+deployment.apps/webui created
+
+# cat nodeport-nginx.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodeport-service
+spec:
+  type: NodePort
+  clusterIP: 10.100.100.200
+  selector:
+    app:  webui
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 30200
+
+# kubectl create -f nodeport-nginx.yaml
+service/nodeport-service created
+
+```
+
+-   노드포트(30200)가 열려 있음을 확인할 수 있음
+
+```bash
+# kubectl get svc -o wide
+NAME               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE   SELECTOR
+kubernetes         ClusterIP   10.96.0.1        <none>        443/TCP        18d   <none>
+nodeport-service   NodePort    10.100.100.200   <none>        80:30200/TCP   20s   app=webui
+
+
+```
+
+-   워커노드 1에 들어가서 30200 포트가 열려있는지 확인해 볼 수 있음
+
+```bash
+# netstat -napt | grep 30200
+tcp        0      0 0.0.0.0:30200           0.0.0.0:*               LISTEN      14123/kube-proxy
+
+```
+
+### LoadBalancer
+-   Public 클라우드 (AWS, Azure, GCP 등)에서 운영가능
+-   클라우드 벤더에서 제공하는 설정 방식으로, 외부IP를 가지고 있는 로드밸런서를 할당
+-   NodePort를 예약 후 해당 nodeport로 외부 접근을 허용
+
+#### LoadBalancer Service
+```bash
+apiVersion: v1
+kind: Service
+metadata:
+  name: loadbalancer-service
+spec:
+  type: LoadBalancer
+  selector:
+    app:webui
+  ports:
+  - protocol: TCP
+    port: 80 
+    targetPort: 80 
+
+```
+
+### ExternalName
+
+-   클러스터 내부에서 External(외부)의 도메인을 설정
+
+#### 실습
+
+-   디플로이먼트를 먼저 생성하고, 서비스 생성
+
+```bash
+# cat > external-name.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: externalname-svc
+spec:
+  type: ExternalName
+  externalName: google.com
+
+# kubectl create -f external-name.yaml
+service/externalname-svc created
+
+# kubectl get svc -o wide
+NAME               TYPE           CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE   SELECTOR
+externalname-svc   ExternalName   <none>       google.com    <none>    4s    <none>
+kubernetes         ClusterIP      10.96.0.1    <none>        443/TCP   18d   <none>
+
+```
+
+-   pod를 생성하고 파드 안으로 진입하여 curl로 service 이름을 호출
+
+```bash
+# kubectl run testpod -it --image=centos:7
+If you dont see a command prompt, try pressing enter.
+
+[root@testpod /]# curl externalname-svc.default.svc.cluster.local
+<!DOCTYPE html>
+<html lang=en>
+  <meta charset=utf-8>
+  <meta name=viewport content="initial-scale=1, minimum-scale=1, width=device-width">
+  <title>Error 404 (Not Found)!!1</title>
+  <style>
+    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* > body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}
+  </style>
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+  <p><b>404.</b> <ins>That’s an error.</ins>
+  <p>The requested URL <code>/</code> was not found on this server.  <ins>That’s all we know.</ins>
+
+```
+
+### 헤드리스 서비스
+
+-   clusterIP가 없는 서비스로 단일진입점이 필요 없을 때 사용
+-   Service와 연결된 Pod의 endpoint로 DNS 레코드가 생성됨
+-   pod의 DNS 주소 : pod-ip-addr.namespace.pod.cluster.local
+-   type이 아니라 ClusterIP가 None인 경우
+-   별도의 IP 단일진입점이 없지만 endpoint들의 DNS 레코드들을 쿠버네티스가 가지고 있는 coreDNS에 등록 → 파드에 대한 endpoint를 DNS 리졸빙 서비스로 요청할 수 있음. 즉 파드가 DNS 리졸빙 서비스를 받을 수 있게 지원
+
+#### 실습
+
+-   디플로이먼트를 먼저 생성하고 서비스를 생성
+    
+    -   디플로이먼트 생성
+    
+    ```bash
+    # cat deploy-nginx.yaml 
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: webui
+    spec:
+      replicas: 3
+      selector:
+        matchLabels:
+          app: webui
+      template:
+        metadata:
+          name: nginx-pod
+          labels:
+            app: webui
+        spec:
+          containers:
+          - name: nginx-container
+            image: nginx:1.14
+    		
+    # kubectl create -f deploy-nginx.yaml 
+    deployment.apps/webui create
+    
+    ```
+    
+    -   cluster ip를 none으로 설정하면 headless service
+    
+    ```bash
+    # cat headless-service.yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: headless-service
+    spec:
+      type: ClusterIP
+      clusterIP: None
+      selector:
+        app: webui
+      ports:
+      - protocol: TCP
+        port: 80
+        targetPort: 80
+    
+    ```
+    
+    -   서비스 생성
+    
+    ```bash
+    # kubectl create -f headless-service.yaml 
+    service/headless-service created
+    
+    # kubectl get svc -o wide
+    NAME               TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE    SELECTOR
+    headless-service   ClusterIP   None         <none>        80/TCP    9s     app=webui
+    kubernetes         ClusterIP   10.96.0.1    <none>        443/TCP   117m   <none>
+    
+    ```
+    
+    -   서비스 상세정보 확인
+    
+    ```bash
+    # kubectl describe svc headless-service 
+    Name:              headless-service
+    Namespace:         default
+    Labels:            <none>
+    Annotations:       <none>
+    Selector:          app=webui
+    Type:              ClusterIP
+    IP Family Policy:  SingleStack
+    IP Families:       IPv4
+    IP:                None
+    IPs:               None
+    Port:              <unset>  80/TCP
+    TargetPort:        80/TCP
+    Endpoints:         10.36.0.1:80,10.44.0.1:80,10.44.0.2:80
+    Session Affinity:  None
+    Events:            <none>
+    
+    ```
+    
+-   pod를 생성하고 파드 안으로 진입하여 dns서버 확인
+    
+
+```bash
+# kubectl run testpod -it --image=centos:7 /bin/bash
+If you dont see a command prompt, try pressing enter.
+
+[root@testpod /]# cat /etc/resolv.conf 
+nameserver 10.96.0.10
+search default.svc.cluster.local svc.cluster.local cluster.local
+options ndots:5
+
+
+```
+
+-   curl 명령어로 DNS레코드(도메인)에 리졸빙을 하게 되면 coreDNS가 연결해줌
+
+```bash
+[root@testpod /]# curl 10-36-0-1.default.pod.cluster.local
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="<http://nginx.org/>">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="<http://nginx.com/>">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+
+```
+
+## kube-proxy
+
+- Kubernetes Service의 구현하는 backend 시스템
+- endpoint 연결을 위한 iptables 구성
+- nodePort로의 접근과 Pod 연결을 구현
+
+
+### userspace
+
+-   클라이언트의 서비스 요청을 iptables를 거쳐 kube-proxy가 받아서 연결
+-   kubernetes 초기버전에 잠깐 사용(지금은 사용되지 않음)
+
+<aside> 💡 실제 노드 포트에서 iptables 룰이 먼저 적용되고 kube-proxy가 받아서 파드와 연결시켜줌
+
+</aside>
+
+### iptables
+
+-   default kubernetes network mode
+-   kube-proxy는 service API 요청시 받아서 iptables 룰이 생성
+-   클라이언트 연결은 kube-proxy가 받아서 iptables 룰을 통해 연결
+
+### IPVS
+
+-   리눅스 커널이 지원하는 L4 로드밸런싱 기술을 이용
+-   별도의 ipvs 지원 모듈을 설정한 후 적용가능
+-   지원 알고리즘: rr(round-robin), lc(least connection), dh(destination hashing), sh(source hashing), sed(shortest expected delay), nq(never queue)
